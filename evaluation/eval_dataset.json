@@ -1,0 +1,44 @@
+﻿[
+  {
+    "document_filename": "rag-anything.pdf",
+    "question": "What is the main contribution of this paper?",
+    "expected_answer_contains": ["dual-graph", "cross-modal", "hybrid retrieval"],
+    "expected_pages": [5],
+    "expected_chunk_types": ["text"]
+  },
+  {
+    "document_filename": "rag-anything.pdf",
+    "question": "Describe the figure on page 4.",
+    "expected_answer_contains": ["figure", "page 4"],
+    "expected_pages": [4],
+    "expected_chunk_types": ["figure", "text"]
+  },
+  {
+    "document_filename": "926_revised paper pdf.pdf",
+    "question": "Summarize the methodology section.",
+    "expected_answer_contains": ["real-time audio system", "advanced technologies", "framework"],
+    "expected_pages": [3, 9],
+    "expected_chunk_types": ["text"]
+  },
+  {
+    "document_filename": "926_revised paper pdf.pdf",
+    "question": "What do the results indicate?",
+    "expected_answer_contains": ["lower error rates", "engagement", "recall"],
+    "expected_pages": [10, 11],
+    "expected_chunk_types": ["text", "table", "figure"]
+  },
+  {
+    "document_filename": "Report_MotorSense_ML_ (1).pdf",
+    "question": "What problem is this report trying to solve?",
+    "expected_answer_contains": ["gaps in existing systems", "implementation challenges", "diagnostic reliability"],
+    "expected_pages": [7, 8, 10],
+    "expected_chunk_types": ["text"]
+  },
+  {
+    "document_filename": "Report_MotorSense_ML_ (1).pdf",
+    "question": "Which chapter contains conclusion and future scope?",
+    "expected_answer_contains": ["Chapter 5", "Conclusion and Future Scope", "5.1 Conclusion"],
+    "expected_pages": [12, 33, 34],
+    "expected_chunk_types": ["text"]
+  }
+]
