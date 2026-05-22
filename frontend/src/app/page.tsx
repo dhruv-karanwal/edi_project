@@ -29,6 +29,15 @@ export default function Home() {
     try {
       const docs = await getDocuments()
       setDocuments(docs)
+      
+      // Auto-deselect selected document if it has been deleted
+      if (selectedDocument) {
+        const stillExists = docs.some((d) => d.id === selectedDocument.id)
+        if (!stillExists) {
+          setSelectedDocument(null)
+          setCurrentAnswer(null)
+        }
+      }
     } catch (error) {
       console.error('Failed to load documents:', error)
     }
@@ -103,6 +112,7 @@ export default function Home() {
               documents={documents}
               selectedDocument={selectedDocument}
               onSelectDocument={handleDocumentSelected}
+              onRefresh={loadDocuments}
             />
           </aside>
 

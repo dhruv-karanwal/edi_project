@@ -16,6 +16,9 @@ export interface Chunk {
   caption: string | null
   image_path: string | null
   bbox: BoundingBox | null
+  // v2.0 — AI layout detection
+  layout_label?: string | null
+  layout_confidence?: number | null
 }
 
 export interface BoundingBox {
@@ -33,6 +36,12 @@ export interface Evidence {
   snippet: string
   image_url: string | null
   relevance_score: number
+  // v2.0 — Hybrid retrieval metadata
+  retrieval_source?: string | null  // "bm25" | "semantic" | "visual" | "multimodal" | "hybrid"
+  layout_label?: string | null      // surya region label
+  bm25_score?: number | null
+  faiss_score?: number | null
+  clip_score?: number | null
 }
 
 export interface QueryResponse {
@@ -70,4 +79,21 @@ export interface ConversationSummary {
 export interface DocumentConversationsResponse {
   document_id: string
   conversations: ConversationSummary[]
+}
+
+// v2.0 — Layout overlay types
+export interface LayoutRegion {
+  chunk_id: string
+  chunk_type: string
+  layout_label: string | null
+  layout_confidence: number | null
+  page_number: number
+  bbox: BoundingBox | null
+  content_preview: string
+}
+
+export interface DocumentLayoutResponse {
+  document_id: string
+  regions: LayoutRegion[]
+  total_count: number
 }

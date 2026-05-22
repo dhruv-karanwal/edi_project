@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: edi-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false  # User will provide this sensitive key in the Render dashboard
+      - key: DATABASE_URL
+        value: sqlite:///./research_rag.db
+      - key: STORAGE_PATH
+        value: ./storage
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: ENABLE_OCR_PREPROCESSING
+        value: "true"
+      - key: PREFER_EASYOCR
+        value: "true"  # Highly recommended for Render cloud deployment
+      - key: ENABLE_LAYOUT_DETECTION
+        value: "true"
+      - key: ENABLE_CLIP
+        value: "true"
+      - key: ENABLE_HYBRID_RETRIEVAL
+        value: "true"
+      - key: ENABLE_LAYOUTLM
+        value: "false"  # Keep disabled to prevent CPU-bound timeouts on Render Free tier

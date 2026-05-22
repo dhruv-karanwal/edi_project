@@ -117,25 +117,31 @@ async def ask_question(request: QueryRequest, db: Session = Depends(get_db)):
     db.add(assistant_msg)
     db.commit()
 
-    # Format evidence models matching response schemas
+    # Format evidence models — v2.0 includes hybrid retrieval metadata
     response_evidence = []
     for ev in evidence_list:
         response_evidence.append(
             Evidence(
-                chunk_id=ev["chunk_id"],
-                chunk_type=ev["chunk_type"],
-                page_number=ev["page_number"],
-                section_title=ev.get("section_title"),
-                snippet=ev["snippet"],
-                image_url=ev.get("image_url"),
-                relevance_score=ev["relevance_score"]
+                chunk_id         = ev["chunk_id"],
+                chunk_type       = ev["chunk_type"],
+                page_number      = ev["page_number"],
+                section_title    = ev.get("section_title"),
+                snippet          = ev["snippet"],
+                image_url        = ev.get("image_url"),
+                relevance_score  = ev["relevance_score"],
+                # v2.0 hybrid retrieval metadata
+                retrieval_source = ev.get("retrieval_source"),
+                layout_label     = ev.get("layout_label"),
+                bm25_score       = ev.get("bm25_score"),
+                faiss_score      = ev.get("faiss_score"),
+                clip_score       = ev.get("clip_score"),
             )
         )
 
     return QueryResponse(
-        answer=answer,
-        conversation_id=conversation_id,
-        evidence=response_evidence
+        answer          = answer,
+        conversation_id = conversation_id,
+        evidence        = response_evidence
     )
 
 @router.get("/conversations/{conversation_id}", response_model=ConversationSchema)
@@ -155,13 +161,18 @@ async def get_messages(conversation_id: str, db: Session = Depends(get_db)):
             for ev in m.evidence:
                 evidence_data.append(
                     Evidence(
-                        chunk_id=ev["chunk_id"],
-                        chunk_type=ev["chunk_type"],
-                        page_number=ev["page_number"],
-                        section_title=ev.get("section_title"),
-                        snippet=ev["snippet"],
-                        image_url=ev.get("image_url"),
-                        relevance_score=ev["relevance_score"]
+                        chunk_id         = ev["chunk_id"],
+                        chunk_type       = ev["chunk_type"],
+                        page_number      = ev["page_number"],
+                        section_title    = ev.get("section_title"),
+                        snippet          = ev["snippet"],
+                        image_url        = ev.get("image_url"),
+                        relevance_score  = ev["relevance_score"],
+                        retrieval_source = ev.get("retrieval_source"),
+                        layout_label     = ev.get("layout_label"),
+                        bm25_score       = ev.get("bm25_score"),
+                        faiss_score      = ev.get("faiss_score"),
+                        clip_score       = ev.get("clip_score"),
                     )
                 )
         response_messages.append(
