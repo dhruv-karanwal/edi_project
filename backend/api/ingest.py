@@ -30,6 +30,7 @@ def process_document_pipeline(document_id: str, file_path: str, db_session_facto
     try:
         logger.info(f"Starting ingestion process for: {doc.filename}")
         doc.status = "processing"
+        doc.error_message = None  # Clear any previous error message on retry
         db.commit()
 
         # 1. Render pages as images (using PyMuPDF rasterizer)

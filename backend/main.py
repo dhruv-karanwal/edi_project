@@ -142,9 +142,10 @@ async def health_check():
     # Database connectivity test
     try:
         from models.db_models import SessionLocal
+        from sqlalchemy import text
         db = SessionLocal()
         # Simple database ping
-        db.execute(sys.maxsize == sys.maxsize)
+        db.execute(text("SELECT 1"))
         db.close()
     except Exception as db_err:
         health_status["status"] = "degraded"
@@ -178,6 +179,6 @@ async def global_exception_handler(request: Request, exc: Exception):
 if __name__ == "__main__":
     import uvicorn
     # Read port from environment for seamless Render/Docker containerisation
-    port = int(os.getenv("PORT", "10000"))
+    port = int(os.getenv("PORT", "8000"))
     logger.info(f"Starting production-ready server via Uvicorn on port {port}...")
     uvicorn.run("main:app", host="0.0.0.0", port=port, log_level="info")

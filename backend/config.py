@@ -78,6 +78,28 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     settings = Settings()
+    
+    # Resolve relative paths to absolute paths relative to the backend directory
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    def make_abs(path: str) -> str:
+        if not os.path.isabs(path):
+            return os.path.abspath(os.path.join(base_dir, path))
+        return os.path.abspath(path)
+        
+    settings.storage_path = make_abs(settings.storage_path)
+    settings.uploads_dir = make_abs(settings.uploads_dir)
+    settings.pages_dir = make_abs(settings.pages_dir)
+    settings.figures_dir = make_abs(settings.figures_dir)
+    settings.vector_dir = make_abs(settings.vector_dir)
+    
+    # Handle SQLite database relative path
+    if settings.database_url.startswith("sqlite:///"):
+        db_path = settings.database_url[10:]
+        if not os.path.isabs(db_path):
+            abs_db_path = os.path.abspath(os.path.join(base_dir, db_path))
+            settings.database_url = f"sqlite:///{abs_db_path}"
+
     # Ensure all storage directories exist at startup
     for directory in [
         settings.storage_path,
